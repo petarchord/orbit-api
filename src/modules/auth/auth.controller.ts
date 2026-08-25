@@ -13,3 +13,12 @@ export async function register(req: Request, res: Response) {
     createdAt: user.createdAt,
   });
 }
+
+export async function login(req: Request, res: Response) {
+  const user = await authService.login(req.body);
+  return res.status(200).json({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+  });
+}
