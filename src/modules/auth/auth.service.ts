@@ -1,10 +1,13 @@
 import argon2 from "argon2";
 import { type RegisterInput, type LoginInput } from "./auth.schema.js";
 import { UserRepository } from "../users/user.repository.js";
+import { SessionService } from "../session/session.service.js";
 import { EmailAlreadyExistsError } from "../../errors/email-already-exist-error.js";
 import { InvalidCredentialsError } from "../../errors/invalid-credentials-error.js";
+import { UnauthorizedError } from "../../errors/unauthorized-error.js";
 
 const userRepository = new UserRepository();
+const sessionService = new SessionService();
 
 export class AuthService {
   async register(input: RegisterInput) {
@@ -36,6 +39,22 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new InvalidCredentialsError();
     }
+    const session = await sessionService.create(user.id);
+    return {
+      user,
+      session,
+    };
+  }
+
+  async getCurrentUser(userId: string) {
+    const user = await userRepository.findById(userId);
+    if (!user) {
+      throw new UnauthorizedError();
+    }
     return user;
+  }
+
+  async logout(token: string) {
+    await sessionService.delete(token);
   }
 }
