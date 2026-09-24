@@ -14,6 +14,9 @@ export class SessionRepository {
   findByTokenHash(tokenHash: string) {
     return prisma.session.findUnique({
       where: { tokenHash },
+      include: {
+        user: true,
+      },
     });
   }
 

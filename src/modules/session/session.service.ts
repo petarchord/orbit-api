@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { SessionRepository } from "./session.repository.js";
 
 const sessionRepository = new SessionRepository();
-const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
+const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
 export class SessionService {
   async create(userId: string) {

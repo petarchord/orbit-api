@@ -19,6 +19,7 @@ export async function authenticate(
   }
   req.user = {
     id: session.userId,
+    role: session.user.role,
   };
   next();
 }
